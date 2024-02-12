@@ -7,12 +7,12 @@ from math import log2
 # Read the data
 
 # calculate the entropy of the dataset, that has 2 classes (expected to be 0 and 1), a single column of 0s and 1
-def entropy(data):
-    if len(data) == 0:
+def entropy(target_column):
+    if len(target_column) == 0:
         return 0
     # calculate the number of 0s and 1s
-    class0 = len(data[data == 0]) / len(data)
-    class1 = len(data[data == 1]) / len(data)
+    class0 = len(target_column[target_column == 0]) / len(target_column)
+    class1 = len(target_column[target_column == 1]) / len(target_column)
     # print(f'0s: {class0}, 1s: {class1}')
     if class0 == 0 or class1 == 0:
         return 0
@@ -64,7 +64,7 @@ def main():
 
     for attribute in dataset.columns:
         best_split_value, best_info_gain = find_best_split(dataset, 'diagnosis(1=m, 0=b)', attribute)
-        print(f'best split value: {best_split_value}, best info gain: {best_info_gain}')
+        print(f'Attribute: {attribute} split value: {best_split_value}, best info gain: {best_info_gain}')
         #print mean
         print(f'mean: {dataset[attribute].mean()}')
         #print minimum of that attribute
