@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 from pandas.core.frame import pandas 
 from decision_tree_utils import * 
-
+import pickle
 
 
 
@@ -24,7 +24,7 @@ class Node:
         print(f'split feature: {self.split_feature}')
         print(f'split value: {self.split_value}')
         print(f' is left None: {self.left == None}')
-        print(f' is right None: {self.right == None}')
+        print(f' is right None: {self.right == None}\n')
 
 
 
@@ -47,7 +47,7 @@ def build_tree(data : pandas.DataFrame, target, max_depth : int, min_samples_spl
         if best_split == None or best_value == None:
             return None
         else:
-            split_feature, split_value = find_best_split(data, target)
+            split_feature, split_value = best_split, best_value
             print(f'split feature: {split_feature}')
             print(f'split value: {split_value}')
             left_data, right_data = split_data(data, split_feature, split_value)
@@ -69,13 +69,34 @@ class DecisionTree:
     def fit(self, data : pandas.DataFrame, target : str):
         self.tree = build_tree(data, target, self.max_depth, self.min_samples_split, 0)
     
-    def display(self):
-        # in order traversal of the tree
+    def predict(self, data : pandas.DataFrame):
+        '''
+        Function to predict the target values
+        '''
+    def inorder(self, node : Node):
+        '''
+        Function to print the tree in inorder traversal
+        '''
+        if node:
+            self.inorder(node.left)
+            node.display()
+            self.inorder(node.right)
+
 
 
 def main():
-    dataset = pd.read_csv('cancer.csv')
-    tree = build_tree(dataset, 'diagnosis(1=m, 0=b)', 10, 10, 0)
+    # dataset = pd.read_csv('cancer.csv')
+    # tree = build_tree(dataset, 'diagnosis(1=m, 0=b)', 10, 10, 0)
+    # #save the tree
+    # with open('tree.pkl', 'wb') as f:
+    #     pickle.dump(tree, f)
+    #
+    #load the tree
+    with open('tree.pkl', 'rb') as f:
+        tree = pickle.load(f)
+    myTree = DecisionTree(10, 10)
+    myTree.tree = tree
+    print(myTree.inorder(myTree.tree))
 
 
 if __name__ == '__main__':
