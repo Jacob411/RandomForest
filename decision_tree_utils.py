@@ -44,7 +44,7 @@ def info_gain(data,target,split_feature,split_value):
     return info_gain
 
 # exhaustive search to find the best split value for each feature
-def find_best_split(data, target, feature):
+def find_best_split_for_feature(data, target, feature):
     # find the best split value for the feature
     best_split_value = 0
     best_info_gain = 0
@@ -57,13 +57,33 @@ def find_best_split(data, target, feature):
 
     return best_split_value, best_info_gain
 
+def find_best_split(data, target):
+    best_split_feature = None
+    best_split_value = 0
+    best_info_gain = 0
+    # find the best split value for each feature
+    for feature in data.columns:
+        if feature == target:
+            continue
+        split_value, info_gain = find_best_split_for_feature(data, target, feature)
+        if info_gain > best_info_gain:
+            best_split_feature = feature
+            best_split_value = split_value
+            best_info_gain = info_gain
+    return best_split_feature, best_split_value
+
+def split_data(data, split_feature, split_value):
+    # split the data into two parts
+    left = data[data[split_feature] <= split_value]
+    right = data[data[split_feature] > split_value]
+    return left, right
 
 def main():
     dataset = pd.read_csv('cancer.csv')
         
 
     for attribute in dataset.columns:
-        best_split_value, best_info_gain = find_best_split(dataset, 'diagnosis(1=m, 0=b)', attribute)
+        best_split_value, best_info_gain = find_best_split_for_feature(dataset, 'diagnosis(1=m, 0=b)', attribute)
         print(f'Attribute: {attribute} split value: {best_split_value}, best info gain: {best_info_gain}')
         #print mean
         print(f'mean: {dataset[attribute].mean()}')
@@ -73,5 +93,8 @@ def main():
         print(f'split num: {len(dataset[dataset[attribute] > best_split_value])}')
 
     print(f'entropy of entire dataset: {entropy(dataset["diagnosis(1=m, 0=b)"])}')
+
+    best_split_feature, best_split_value= find_best_split(dataset, 'diagnosis(1=m, 0=b)')
+    print(f'best split feature: {best_split_feature}, best split value: {best_split_value}, best info gain: {best_info_gain}')
 if __name__ == "__main__":
     main()
