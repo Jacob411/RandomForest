@@ -64,6 +64,7 @@ class DecisionTree:
     def __init__(self, max_depth : int, min_samples_split : int):
         self.max_depth = max_depth
         self.min_samples_split = min_samples_split
+        self.target = None
         self.tree = None
 
     def fit(self, data : pandas.DataFrame, target : str):
@@ -81,23 +82,51 @@ class DecisionTree:
             self.inorder(node.left)
             node.display()
             self.inorder(node.right)
-
-
-
+    def predict(self, data : pandas.DataFrame):
+        '''
+        Function to predict the target values
+        '''
+        current_node = self.tree
+        while current_node.left != None and current_node.right != None:
+            if data[current_node.split_feature] <= current_node.split_value:
+                current_node = current_node.left
+            else:
+                current_node = current_node.right
+        
+        return current_node.data[self.target].mode()[0]
 def main():
-    # dataset = pd.read_csv('cancer.csv')
-    # tree = build_tree(dataset, 'diagnosis(1=m, 0=b)', 10, 10, 0)
+    dataset = pd.read_csv('cancer.csv')
+    # get train and test data splits no sklearn
+    shuffled_data = dataset.sample(frac=1, random_state=12)
+    train_size = int(0.8 * len(shuffled_data))
+
+    train_data = shuffled_data[:train_size]
+    test_data = shuffled_data[train_size:]
+
+    
+
+
+    tree = build_tree(train_data, 'diagnosis(1=m, 0=b)', 10, 10, 0)
     # #save the tree
-    # with open('tree.pkl', 'wb') as f:
-    #     pickle.dump(tree, f)
-    #
+    with open('tree.pkl', 'wb') as f:
+        pickle.dump(tree, f)
+
     #load the tree
-    with open('tree.pkl', 'rb') as f:
-        tree = pickle.load(f)
+    #get row to predict
+    # with open('tree.pkl', 'rb') as f:
+    #     tree = pickle.load(f)
     myTree = DecisionTree(10, 10)
     myTree.tree = tree
-    print(myTree.inorder(myTree.tree))
 
+    myTree.target = 'diagnosis(1=m, 0=b)'
 
+    #predict all the rows and check the accuracy
+    correct = 0
+    for i in range(len(test_data)):
+        row = test_data.iloc[i]
+        if myTree.predict(row) == row[myTree.target]:
+            correct += 1
+    print(f'accuracy: {correct/len(test_data)}')
+        
 if __name__ == '__main__':
     main()
