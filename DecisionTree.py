@@ -103,10 +103,11 @@ def main():
     train_data = shuffled_data[:train_size]
     test_data = shuffled_data[train_size:]
 
-    
+    maxDepthIn = int(input('Enter the max depth: '))
+    minSamplesIn = int(input('Enter the min samples: '))
 
 
-    tree = build_tree(train_data, 'diagnosis(1=m, 0=b)', 10, 10, 0)
+    tree = build_tree(train_data, 'diagnosis(1=m, 0=b)', maxDepthIn, minSamplesIn, 0)
     # #save the tree
     with open('tree.pkl', 'wb') as f:
         pickle.dump(tree, f)
