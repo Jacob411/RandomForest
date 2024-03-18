@@ -33,9 +33,6 @@ def build_tree(data : pandas.DataFrame, target, max_depth : int, min_samples_spl
     '''
     Function to build the decision tree
     '''
-    print(f'length of data: {len(data)}')
-    print(f'entropy: {entropy(data[target])}')
-
     if len(data) == 0:
         return None
     elif depth >= max_depth:
@@ -48,8 +45,7 @@ def build_tree(data : pandas.DataFrame, target, max_depth : int, min_samples_spl
             return None
         else:
             split_feature, split_value = best_split, best_value
-            print(f'split feature: {split_feature}')
-            print(f'split value: {split_value}')
+         
             left_data, right_data = split_data(data, split_feature, split_value)
             node = Node(data, split_feature, split_value)
             node.left = build_tree(left_data, target, max_depth, min_samples_split, depth + 1)
