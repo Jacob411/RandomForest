@@ -70,10 +70,7 @@ class DecisionTree:
     def fit(self, data : pandas.DataFrame, target : str):
         self.tree = build_tree(data, target, self.max_depth, self.min_samples_split, 0)
     
-    def predict(self, data : pandas.DataFrame):
-        '''
-        Function to predict the target values
-        '''
+
     def inorder(self, node : Node):
         '''
         Function to print the tree in inorder traversal
