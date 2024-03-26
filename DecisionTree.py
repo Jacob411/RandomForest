@@ -7,7 +7,6 @@ from decision_tree_utils import *
 import pickle
 
 
-
 class Node:
     '''
     Node class for our decision tree
@@ -17,7 +16,7 @@ class Node:
         self.split_feature = split_feature
         self.split_value = split_value
         self.left = None
-        self.right = None 
+        self.right = None
     
     def display(self):
         print(f'length of data: {len(self.data)}')
@@ -66,7 +65,6 @@ class DecisionTree:
     def fit(self, data : pandas.DataFrame, target : str):
         self.tree = build_tree(data, target, self.max_depth, self.min_samples_split, 0)
     
-
     def inorder(self, node : Node):
         '''
         Function to print the tree in inorder traversal
@@ -75,6 +73,7 @@ class DecisionTree:
             self.inorder(node.left)
             node.display()
             self.inorder(node.right)
+    
     def predict(self, data : pandas.DataFrame):
         '''
         Function to predict the target values
@@ -87,6 +86,11 @@ class DecisionTree:
                 current_node = current_node.right
         
         return current_node.data[self.target].mode()[0]
+
+
+
+
+
 def main():
     dataset = pd.read_csv('cancer.csv')
     # get train and test data splits no sklearn
@@ -99,18 +103,10 @@ def main():
     maxDepthIn = int(input('Enter the max depth: '))
     minSamplesIn = int(input('Enter the min samples: '))
 
+    myTree = DecisionTree(maxDepthIn, minSamplesIn)
+    myTree.fit(train_data, 'diagnosis(1=m, 0=b)')
+   
 
-    tree = build_tree(train_data, 'diagnosis(1=m, 0=b)', maxDepthIn, minSamplesIn, 0)
-    # #save the tree
-    with open('tree.pkl', 'wb') as f:
-        pickle.dump(tree, f)
-
-    #load the tree
-    #get row to predict
-    # with open('tree.pkl', 'rb') as f:
-    #     tree = pickle.load(f)
-    myTree = DecisionTree(10, 10)
-    myTree.tree = tree
 
     myTree.target = 'diagnosis(1=m, 0=b)'
 

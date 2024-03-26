@@ -25,21 +25,24 @@ class RandomForest:
         Fit the random forest to the data
         '''
         columns = data.columns
-        # remove the target column
-        print(columns)
+
         for i in range(self.numTrees):
             print(f'Fitting tree {i}')
             tree = DecisionTree(self.maxDepth, self.minSamples)
-            bootstrap_sample = bootstrap(data, len(data))
+            
+            # Bootstrap .632 sampling method
+            bootstrap_sample = bootstrap(data, int(0.632 * len(data))
             selected_sample = bootstrap_sample
 
-            # sample the columns
+            # Sample the columns
             if self.maxFeatures:
                 sample_columns = random.sample(list(columns), self.maxFeatures)
                 print(f'Selected columns: {sample_columns}')
-                # use loc to select the columns
+
+                # Use loc to select the columns
                 selected_sample = selected_sample.loc[:, sample_columns]
-            # add the target back to the sample
+
+            # Add the target back to the sample
             selected_sample[target] = bootstrap_sample[target]
 
             tree.fit(selected_sample, target)
@@ -60,6 +63,7 @@ class RandomForest:
 
 def main():
     data = pd.read_csv('cancer.csv')
+
     #drop the id column
     data.reset_index(drop=True, inplace=True)
     print(data.head())
@@ -82,6 +86,7 @@ def main():
     forest = RandomForest(numTreesIn, maxDepthIn, minSamplesIn, maxFeaturesIn)
     
     forest.fit(train_data, 'diagnosis(1=m, 0=b)')
+
     #predict all the rows and check the accuracy
     correct = 0
     for i in range(len(test_data)):
