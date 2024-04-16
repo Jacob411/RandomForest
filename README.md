@@ -21,7 +21,7 @@ pip install pandas numpy
 ```
 ## Usage
 ```python
-Copy code
+
 from forest import RandomForest
 
 # Create a RandomForestClassifier object
