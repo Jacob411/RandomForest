@@ -16,32 +16,27 @@ Install the required dependencies using pip:
 
 ```bash
 pip install pandas numpy
-Usage
-python
+```
+## Usage
+```python
 Copy code
-from random_forest import RandomForestClassifier
+from forest import RandomForest
 
 # Create a RandomForestClassifier object
-rf_classifier = RandomForestClassifier(num_trees=10, max_depth=5, min_samples_split=2, min_samples_leaf=1)
+rf_classifier = RandomForest(numTrees=10, maxDepth=10, minSamples=10, maxFeatures=6)
 
 # Train the classifier
-rf_classifier.fit(X_train, y_train)
+rf_classifier.fit(train_data, target_variable)
 
 # Predict on test data
-predictions = rf_classifier.predict(X_test)
+predictions = rf_classifier.predict(test_data)
+```
+## Parameters
+numTrees: The number of trees in the random forest.
+maxDepth: The maximum depth of the tree.
+minSamples: The minimum number of samples required to split an internal node.
+maxFeatures: The number of features each tree is allowed to use.
 
-# Evaluate the classifier
-accuracy = rf_classifier.accuracy(y_test, predictions)
-print("Accuracy:", accuracy)
-Parameters
-num_trees: The number of trees in the random forest.
-max_depth: The maximum depth of the tree.
-min_samples_split: The minimum number of samples required to split an internal node.
-min_samples_leaf: The minimum number of samples required to be at a leaf node.
-Data Format
-The input data should be in the form of Pandas DataFrame for both features (X) and target (y).
-
-License
+## License
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-vbnet
