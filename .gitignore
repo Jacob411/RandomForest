@@ -1,2 +1,5 @@
-/__pycache__
-tree.pikl
+# ignore pycache
+global-exclude __pycache__
+
+# ignore .pkl files
+global-exclude *.pkl
