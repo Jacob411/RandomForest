@@ -31,13 +31,13 @@ class RandomForest:
             tree = DecisionTree(self.maxDepth, self.minSamples)
             
             # Bootstrap .632 sampling method
-            bootstrap_sample = bootstrap(data, int(0.632 * len(data))
+            bootstrap_sample = bootstrap(data, int(0.632 * len(data)))
             selected_sample = bootstrap_sample
 
             # Sample the columns
             if self.maxFeatures:
                 sample_columns = random.sample(list(columns), self.maxFeatures)
-                print(f'Selected columns: {sample_columns}')
+                print(f'Selected columns: {sample_columns}\n')
 
                 # Use loc to select the columns
                 selected_sample = selected_sample.loc[:, sample_columns]
@@ -66,7 +66,6 @@ def main():
 
     #drop the id column
     data.reset_index(drop=True, inplace=True)
-    print(data.head())
 
     shuffled_data = data.sample(frac=1, random_state=72)
     train_size = int(0.8 * len(shuffled_data))
@@ -74,14 +73,12 @@ def main():
     train_data = shuffled_data[:train_size]
     test_data = shuffled_data[train_size:]
 
-    print('----------------')
-    print(train_data.head())
-
-
     maxDepthIn = int(input('Enter the max depth: '))
     minSamplesIn = int(input('Enter the min samples: '))
     numTreesIn = int(input('Enter the number of trees: '))
     maxFeaturesIn = int(input('Enter the max features: '))
+
+    print('----------------')
 
     forest = RandomForest(numTreesIn, maxDepthIn, minSamplesIn, maxFeaturesIn)
     
